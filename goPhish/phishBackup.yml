@@ -1,0 +1,22 @@
+---
+- hosts: targetHosts
+  tasks:
+    - name: Make destination folder
+      file:
+        path: "/home/riggsc/backups/backup_{{ ansible_date_time.date }}"
+        state: directory
+    - name: Copy current files
+      copy:
+        src: "/home/riggsc/gophish/{{ item }}"
+        dest: "/home/riggsc/backups/backup_{{ ansible_date_time.date }}"
+      with_items: ["gophish.db","config.json"]
+    - name: Find backup directories
+      find:
+        paths: /home/riggsc/backups/
+        file_type: directory
+      register: return
+    - name: Delete oldest directory
+      file:
+        path: "{{return.files[0].path}}"
+        state: absent
+      when: return.files | length > 4

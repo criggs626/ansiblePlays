@@ -1,5 +1,5 @@
 ---
-- hosts: targetHosts
+- hosts: all
   tasks:
   - name: Test Connection
     ping:
