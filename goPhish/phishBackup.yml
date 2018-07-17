@@ -8,6 +8,7 @@
     - name: Copy current files
       copy:
         src: "/home/{{ ansible_user_id }}/gophish/{{ item }}"
+        remote_src: yes
         dest: "/home/{{ ansible_user_id }}/backups/backup_{{ ansible_date_time.date }}"
       with_items: ["gophish.db","config.json"]
     - name: Find backup directories
