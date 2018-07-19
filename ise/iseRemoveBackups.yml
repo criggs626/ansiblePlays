@@ -4,28 +4,26 @@
     - name: Find Daily backup files
       find:
         paths: /home/{{ ansible_user_id }}/
-        age: 7d
         patterns: "Daily*.tar.gpg"
       register: return
     - name: Delete older daily backups
       file:
         path: "{{ item.path }}"
         state: absent
-      loop: "{{ return.files }}"
+      loop: "{{ return.files | sort(attribute='ctime')}}"
       loop_control:
         index_var: i
       when: return.files | length - i > 7
     - name: Find Nightly backup files
       find:
         paths: /home/{{ ansible_user_id }}/
-        age: 7d
         patterns: "Nightly*.tar.gpg"
       register: return
     - name: Delete older nightly backups
       file:
         path: "{{ item.path }}"
         state: absent
-      loop: "{{ return.files }}"
+      loop: "{{ return.files | sort(attribute='ctime') }}"
       loop_control:
         index_var: i
-      when: return.files | length - i > 3
+      when: return.files | length - i > 7
