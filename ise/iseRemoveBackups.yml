@@ -4,6 +4,7 @@
     - name: Find Daily backup files
       find:
         paths: /home/{{ ansible_user_id }}/
+        age: 7d
         patterns: "Daily*.tar.gpg"
       register: return
     - name: Delete older daily backups
@@ -17,6 +18,7 @@
     - name: Find Nightly backup files
       find:
         paths: /home/{{ ansible_user_id }}/
+        age: 7d
         patterns: "Nightly*.tar.gpg"
       register: return
     - name: Delete older nightly backups
@@ -26,4 +28,4 @@
       loop: "{{ return.files }}"
       loop_control:
         index_var: i
-      when: return.files | length - i > 7
+      when: return.files | length - i > 3
