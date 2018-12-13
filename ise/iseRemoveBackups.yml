@@ -1,5 +1,5 @@
 ---
-- hosts: targetHosts
+- hosts: iseBackup
   tasks:
     - name: Find Daily backup files
       find:
